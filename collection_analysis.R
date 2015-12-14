@@ -5,5 +5,3 @@ rm(list=ls())
 
 ### Read in my data ####
 collection<-read.csv(file = "Data/2015_collection_data.csv", header = T, stringsAsFactors = F)
-
-my.test<-"test"
