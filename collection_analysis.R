@@ -56,7 +56,7 @@ plot(model1)
 dev.off()
 
 boxplot(my.df$SR ~ my.df$Visit,
-        ylab="Species Richness", xlab="Visit")
+        ylab="Species Richness", xlab="Visit", notch=T)
 
 boxplot(my.df$SR ~ my.df$Treat,
         ylab="Species Richness", xlab="Treatment", notch=T)
