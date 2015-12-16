@@ -7,6 +7,7 @@ rm(list=ls())
 library(lme4)
 library(MuMIn)
 library(LMERConvenienceFunctions)
+library(plot2)
 
 ### Read in my data ######################################
 collection<-read.csv(file = "Data/2015_collection_data.csv", header = T, stringsAsFactors = F)
@@ -53,7 +54,7 @@ var(my.df$SR)
 summary(my.df)
 
 ### start building my mixed effect models #########################
-model1.lmer <- glmer(SR ~ Treat + Park + Visit + (Park|Pair),
+model1.lmer <- glmer(SR ~ Treat + Park + Visit.numeric + (Park|Pair),
                 family = poisson (link = "log"), 
                 data = my.df)
 AIC(model1.lmer)
@@ -72,12 +73,19 @@ anova(model1.lmer)
 
 ### Plot the raw data ###############################
 
-## Plotting a graph of the model
-plot(my.df$SR ~ my.df$Visit, pch=21, cex=1.8,  
-     xlab="Visit", ylab="Species Richness", cex.lab = 1.3,
-     col = my.df$Park)
+## Plotting a graph of the raw data in base
+boxplot(SR ~ Treat*Visit, data = my.df, pch=21, cex=1.8,  
+     xlab="Visit", ylab="Species Richness",
+     cex.lab = 1.3, col= c("red","blue"))
 
-### Plot the model on to the raw data ####################
+### Plotting a graph of the raw data in ggplot2
+boxy<-ggplot(data = my.df, aes(x=Visit, y=SR, fill = Treat))
+  ### make the boxplot and suppress the outliers as we are plotting the points anyway
+boxy + geom_boxplot(aes(fill=Treat), alpha=0.5, position = position_dodge(width = 0.85), outlier.shape = NA) +
+  ### plot the points
+  geom_point(pch = 21, position = position_jitterdodge()) +
+  ### fix the axes titles
+  labs(y = "Species Richness", x="Visit")
 
 # Step 1: Making a table of prediction data (pdat)
 pdat <- expand.grid(SR = seq(min(my.df$SR),max(my.df$SR),0.1),
