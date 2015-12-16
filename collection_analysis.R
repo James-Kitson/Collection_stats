@@ -54,7 +54,7 @@ var(my.df$SR)
 summary(my.df)
 
 ### start building my mixed effect models #########################
-model1.lmer <- glmer(SR ~ Treat + Park + Visit.numeric + (Park|Pair),
+model1.lmer <- glmer(SR ~ Treat + Park + Visit + (Park|Pair),
                 family = poisson (link = "log"), 
                 data = my.df)
 AIC(model1.lmer)
