@@ -3,6 +3,11 @@
 ### Clear the workspace
 rm(list=ls())
 
+### get the libraries I need ####
+library(lme4)
+library(MuMIn)
+library(LMERConvenienceFunctions)
+
 ### Read in my data ####
 collection<-read.csv(file = "Data/2015_collection_data.csv", header = T, stringsAsFactors = F)
 ### Make a unique tree ID
@@ -35,6 +40,8 @@ for (i in c(1:5,7)){
 my.df[,i]<-as.factor(my.df[,i])
 }
 
+### start looking at the data to decide how to analyse my data ####
+
 ### look at how species richness is distributed
 hist(my.df$SR)
 
@@ -44,7 +51,9 @@ var(my.df$SR)
 
 summary(my.df)
 
-model1 <- glm (SR ~ Treat + Park + Visit, 
+### start building my mixed effect models ####
+
+model1 <- lmer(SR ~ Treat + Park + Visit, 
                family = poisson (link = sqrt), data = my.df)
 
 AIC(model1)
